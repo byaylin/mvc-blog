@@ -1,10 +1,11 @@
 const express = require('express');
 const allRoutes = require('./controllers');
 const session = require('express-session');
+const expbhs = require('express-session');
 
 //sets up express
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -13,7 +14,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { User, Post, Comment } = require('./models');
 
 const sess = {
-    secret: 'Super secret secret',
+    secret: process.env.SESSION_SECRET,
     cookies: {
         maxAge: 1000*60*60*2
     },
@@ -23,14 +24,29 @@ const sess = {
         db: sequelize
     })
 };
-app.use(session(sess));
 
-app.use(allRoutes)
-app.get('/', (req, res) => {
-    res.send("Hi welcome to my tech blog")
+app.use(session(sess));
+app.use(allRoutes);
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+const hbs = expbhs.create({});
+app.engine("handlebars", hbs.engine);
+app.set('view engine', 'handlebars');
+
+
+app.get('/*', (req, res) => {
+    res.send("oops")
 })
+
+app.get('/', (req,res) =>{
+    res.json(req.session)
+})
+
 sequelize.sync({ force: true }).then(function(){
 app.listen(PORT, function(){
         console.log('Listening on PORT ' + PORT)}
     )
-})
+});
