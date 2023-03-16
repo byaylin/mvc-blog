@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models');
+const bcrypt = require('bcrypt');
 
 //get all users
 router.get('/', (req,res)=>{
@@ -33,6 +34,30 @@ router.post('/', (req,res)=>{
         password: req.body.password
     }).then(userData=>{
         res.json(userData)
+    }).catch(err=>(
+        console.log(err=>{
+            res.status(500).json({msg:"oops", err})
+        })
+    ))
+});
+
+router.post('/login', (req, res) => {
+    User.findOne({
+        where: {
+            username: req.body.username
+        }
+    }).then(userData =>{
+        if(!userData){
+            return res.status(401).json({msg: "wrong userrname or password"})
+        } else {
+            if(bcrypt.compareSync(req.body.password, userData.password)){
+                req.session.userId = userData.id,
+                req.session.userUsername = userData.username;
+                return res.json(userData)
+            } else {
+                return res.status(401).json({msg: "wrong username or password"})
+            }
+        }
     }).catch(err=>(
         console.log(err=>{
             res.status(500).json({msg:"oops", err})
