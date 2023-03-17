@@ -2,7 +2,8 @@ const express = require('express');
 const allRoutes = require('./controllers');
 const session = require('express-session');
 const exphbs = require('express-handlebars');
-const path = require('path')
+const path = require('path');
+
 
 //sets up express
 const app = express();
