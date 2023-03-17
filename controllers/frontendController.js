@@ -2,19 +2,19 @@ const express = require("express");
 const router = express.Router();
 const { User, Post } = require("../models");
 
-router.get('/',(req,res) =>{
+router.get("/",(req,res)=>{
     Post.findAll({
-         include: [User],
-    }).then((postData)=>{
-        const hbsPosts = postData.map((map)=> postData.toJSON());
+        include:[User]
+    }).then(postData=>{
+        //console.log(postData)
+        const posts = postData.map(post=>post.toJSON())
+        console.log('==============================')
+        //console.log(posts)
+        res.render("home",{
+            //allPosts:hbsPosts
+        })
     })
-    console.log(hbsPosts);
-    res.render('homepage', {
-        allPosts: hbsPosts,
-        loggedIn: req.session.loggedIn,
-        userId: req.session.userId
-    })
-});
+})
 
 //login
 router.get('/login', (req, res)=>{

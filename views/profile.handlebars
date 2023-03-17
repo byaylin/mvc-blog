@@ -1,0 +1,24 @@
+<main class="container">
+    <h1>Welcome, {{username}}!</h1>
+    <h2>Add a post</h2>
+    <form id="new-post-form">
+        <div class="mb-3">
+            <label for="example" class="form-label"></label>
+            <input class="form-control" id="title-input" placeholder="Title">
+        </div>
+        <div class="mb-3">
+            <label for="example" class="form-label"></label>
+            <textarea class="form-control" id="post-input" rows="3" placeholder="Text area"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Post!</button>
+    </form>
+    <h2>my posts</h2>
+    {{#each Posts}}
+        <section class="card">
+            <h4>{{title}}</h4>
+            <p class="">  {{post}}</p>
+        </section>
+    {{/each}}
+</main>
+
+<script src="/js/profile.js"></script>
