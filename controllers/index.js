@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const thoughtRoutes = require('./userController');
-router.use('/api/user',thoughtRoutes);
+const postRoutes = require('./userController');
+router.use('/api/posts',postRoutes);
 
 const userRoutes = require('./userController');
 router.use('/api/user',userRoutes);
